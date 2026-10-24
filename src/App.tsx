@@ -1,13 +1,13 @@
 import './App.css'
 import {Todolist} from './Todolist'
 
+import { jsx as _jsx } from "react/jsx-runtime";
+
 function App() {
     return <>
-        <Todolist/>
-        <Todolist/>
-        <Todolist/>
-        <Todolist/>
-        <Todolist/>
+        <Todolist title={'что купить'} />
+        <Todolist title={'выучить'} />
+        <Todolist title={'тренировка'} />
     </>
 }
 

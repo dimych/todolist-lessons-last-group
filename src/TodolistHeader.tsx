@@ -1,5 +1,6 @@
-export function TodolistHeader() {
-    return <><h3>What to learn</h3>
+// contract, interface, сигнатура
+export function TodolistHeader(props) {
+    return <><h3>{props.headerTitle}</h3>
         <div>
             <input/>
             <button>+</button>
