@@ -1,33 +1,55 @@
 import './App.css'
 
 function App() {
-  return (
-      <div className="app">
-        <div>
-          <h3>What to learn</h3>
-          <div>
-            <input/>
-            <button>+</button>
-          </div>
-          <ul>
-            <li>
-              <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={true}/> <span>JS</span>
-            </li>
-            <li>
-              <input type="checkbox" checked={false}/> <span>React</span>
-            </li>
-          </ul>
-          <div>
-            <button>All</button>
-            <button>Active</button>
-            <button>Completed</button>
-          </div>
-        </div>
-      </div>
-  )
+    return <>
+        <Todolist/>
+        <Todolist/>
+        <Todolist/>
+        <Todolist/>
+        <Todolist/>
+    </>
 }
 
 export default App
+
+// atomic design : atom (ui kit); molecul -> organisms
+// vocabulary - словарь, tesaurus, ubiquitous language
+// SLA - SINGLE LAYER ABSTRACTION
+// pure fabraction (GRASP)
+
+function Task() {
+    return <li>
+        <input type="checkbox" checked={true}/> <span>HTML&CSS</span>
+    </li>
+}
+
+function TodolistHeader() {
+    return <><h3>What to learn</h3>
+        <div>
+            <input/>
+            <button>+</button>
+        </div>
+    </>
+}
+
+function TodolistFilter() {
+    return  <div>
+        <button>All</button>
+        <button>Active</button>
+        <button>Completed</button>
+    </div>
+}
+
+function Todolist() {
+    return <div>
+        <TodolistHeader />
+        <ul>
+            <Task/>
+            <Task/>
+            <Task/>
+            <Task/>
+            <Task/>
+        </ul>
+        <TodolistFilter />
+    </div>
+}
