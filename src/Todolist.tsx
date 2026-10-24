@@ -1,22 +1,20 @@
 import {TodolistHeader} from './TodolistHeader'
 import {Task} from './Task'
 import {TodolistFilter} from './TodolistFilter'
+import {TodolistType} from "./App.tsx";
 
 // clousure, замыкание
 // react
 type TodolistProps = {
-    title: string
+    todolist: TodolistType
 }
 export function Todolist(props: TodolistProps) {
-    console.log(props.title)
     return <div>
-        <TodolistHeader headerTitle={props.title} />
+        <TodolistHeader headerTitle={props.todolist.title} tasksCount={props.todolist.tasks.length} />
         <ul>
-            <Task/>
-            <Task/>
-            <Task/>
-            <Task/>
-            <Task/>
+            {
+                props.todolist.tasks.map((t) =>  <Task key={t.id} task={t} />)
+            }
         </ul>
         <TodolistFilter />
     </div>

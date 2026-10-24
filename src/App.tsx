@@ -1,13 +1,43 @@
 import './App.css'
 import {Todolist} from './Todolist'
 
-import { jsx as _jsx } from "react/jsx-runtime";
+
+const todolists = [
+    {
+        id: 1, title: 'что купить', tasks: [
+            {id: 1, title: 'молоко', isDone: true},
+            {id: 2, title: 'хлеб', isDone: false},
+            {id: 3, title: 'яйца', isDone: false},
+        ]
+    },
+    {
+        id: 2, title: 'выучить', tasks: [
+            {id: 4, title: 'HTML&CSS', isDone: true},
+            {id: 5, title: 'JS', isDone: true},
+            {id: 6, title: 'React', isDone: false},
+        ]
+    },
+    {
+        id: 3, title: 'тренировка', tasks: [
+            {id: 7, title: 'разминка', isDone: true},
+            {id: 8, title: 'отжимания', isDone: false},
+        ]
+    },
+]
+
+export type TodolistType = typeof todolists[number];
+export type TaskType = typeof todolists[number]['tasks'][number];
+
+
 
 function App() {
+
+
     return <>
-        <Todolist title={'что купить'} />
-        <Todolist title={'выучить'} />
-        <Todolist title={'тренировка'} />
+        {
+            todolists
+            .map(t => <div key={t.id}> <Todolist todolist={t} /></div>)
+        }
     </>
 }
 
