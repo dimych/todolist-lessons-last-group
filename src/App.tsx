@@ -24,11 +24,14 @@ const todolists = [
     },
 ]
 
+class Car{}
+const c1 = new Car()
+const c2 = new Car()
 
 export type TodolistType = typeof todolists[number];
 export type TaskType = typeof todolists[number]['tasks'][number];
 
-
+// fibers tree: { app: {state, props}, children: [{state, props},{}, {},{}] }
 
 function App() {
 

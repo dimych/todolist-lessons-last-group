@@ -5,11 +5,42 @@ import {useState} from "react";
 import * as React from "react";
 
 
-const element = <ExampleCounter/>;
+const element = <ExampleArray/>;
 
 createRoot(document.getElementById('root')!)
     //.render(<App />)
     .render(element)
+
+
+// REACT_ROOT_APP: {  fiber: { type: ExampleArray, states: [{value: [1,2,3,4] }]  }
+
+// function setTasks(newArray) {
+//    const prevArr = getCurrentState()
+//    if (newArray === prevArr) return;
+//    saveState(newArray)
+//    const actualJsx = ExampleArray()
+// }
+
+
+//newCounter
+function ExampleArray() {
+    const [tasks, setTasks] = React.useState([1,2,3])
+//-----------
+
+    console.log('ExampleCounter rendering')
+
+    return <div>
+        {
+            tasks.map( (task, index) => <h3 key={index}>{task}</h3>)
+        }
+        <button onClick={() => {
+            setTasks( [...tasks, Math.random()] )
+        }}>inc
+        </button>
+    </div>
+}
+
+
 
 // REACT_ROOT_APP: {  fiber: { type: ExampleCounter, states: [{value: {v: 14} }]  }
                                                                         //newCounter
@@ -26,8 +57,7 @@ function ExampleCounter() {
             console.log(counter.v)
             setCounter({
                 ...counter,
-                v: counter.v + 1
-            })
+                v: counter.v + 1 } )
         }}>inc
         </button>
     </div>
