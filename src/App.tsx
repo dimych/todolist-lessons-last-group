@@ -1,11 +1,10 @@
 import './App.css'
 import {Todolist} from './Todolist'
 
-
 const todolists = [
     {
         id: 1, title: 'что купить', tasks: [
-            {id: 1, title: 'молоко', isDone: true},
+            {id: 1, title: 'молоко', isDone: false},
             {id: 2, title: 'хлеб', isDone: false},
             {id: 3, title: 'яйца', isDone: false},
         ]
@@ -25,13 +24,13 @@ const todolists = [
     },
 ]
 
+
 export type TodolistType = typeof todolists[number];
 export type TaskType = typeof todolists[number]['tasks'][number];
 
 
 
 function App() {
-
 
     return <>
         {

@@ -9,6 +9,7 @@ type TodolistProps = {
     todolist: TodolistType
 }
 export function Todolist(props: TodolistProps) {
+    console.log('rerender todolist: ' + props.todolist.title)
     return <div>
         <TodolistHeader headerTitle={props.todolist.title} tasksCount={props.todolist.tasks.length} />
         <ul>

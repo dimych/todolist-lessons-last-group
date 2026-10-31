@@ -7,7 +7,7 @@ type TodolistHeaderProps = {
 export function TodolistHeader(props: TodolistHeaderProps) {
     return <><h3>{props.headerTitle} ( {props.tasksCount} tasks )</h3>
         <div>
-            <input value={'js'}/>
+            <input/>
             <button>+</button>
         </div>
     </>
