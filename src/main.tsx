@@ -11,19 +11,23 @@ createRoot(document.getElementById('root')!)
     //.render(<App />)
     .render(element)
 
-// REACT_ROOT_APP: {  fiber: { type: ExampleCounter, states: [{value: 4}]  }
-
+// REACT_ROOT_APP: {  fiber: { type: ExampleCounter, states: [{value: {v: 14} }]  }
+                                                                        //newCounter
 function ExampleCounter() {
-    const [counter, setCounter] = React.useState(0)
+    const [counter, setCounter] = React.useState({v: 0 })
 
 
 //-----------
 
     console.log('ExampleCounter rendering')
 
-    return <div>{counter}
+    return <div>{counter.v}
         <button onClick={() => {
-            setCounter(counter+1)
+            console.log(counter.v)
+            setCounter({
+                ...counter,
+                v: counter.v + 1
+            })
         }}>inc
         </button>
     </div>
