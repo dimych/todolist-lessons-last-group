@@ -1,15 +1,14 @@
 import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App'
-import {useState} from "react";
 import * as React from "react";
 
 
-const element = <ExampleArray/>;
+
 
 createRoot(document.getElementById('root')!)
-    //.render(<App />)
-    .render(element)
+    .render(<App />)
+    //.render(element)
 
 
 // REACT_ROOT_APP: {  fiber: { type: ExampleArray, states: [{value: [1,2,3,4] }]  }
