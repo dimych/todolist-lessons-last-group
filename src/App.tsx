@@ -1,26 +1,34 @@
 import './App.css'
 import {Todolist} from './Todolist'
-import {useEffect, useState} from "react";
+import {type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState} from "react";
+
+// const color1 = {value: 'red'}
+// const color2 = {value: 'red'}
+
+// CRUD
+function uuid() {
+    return crypto.randomUUID()
+}
 
 const todolistsFromServer = [
     {
-        id: 1, title: 'что купить', tasks: [
-            {id: 1, title: 'молоко', isDone: false},
-            {id: 2, title: 'хлеб', isDone: false},
-            {id: 3, title: 'яйца', isDone: false},
+        id: uuid(), title: 'что купить', tasks: [
+            {id: uuid(), title: 'молоко', isDone: false},
+            {id: uuid(), title: 'хлеб', isDone: false},
+            {id: uuid(), title: 'яйца', isDone: false},
         ]
     },
     {
-        id: 2, title: 'выучить', tasks: [
-            {id: 4, title: 'HTML&CSS', isDone: true},
-            {id: 5, title: 'JS', isDone: true},
-            {id: 6, title: 'React', isDone: false},
+        id: uuid(), title: 'выучить', tasks: [
+            {id: uuid(), title: 'HTML&CSS', isDone: true},
+            {id: uuid(), title: 'JS', isDone: true},
+            {id: uuid(), title: 'React', isDone: false},
         ]
     },
     {
-        id: 3, title: 'тренировка', tasks: [
-            {id: 7, title: 'разминка', isDone: true},
-            {id: 8, title: 'отжимания', isDone: false},
+        id: uuid(), title: 'тренировка', tasks: [
+            {id: uuid(), title: 'разминка', isDone: true},
+            {id: uuid(), title: 'отжимания', isDone: false},
         ]
     },
 ]
@@ -42,16 +50,10 @@ export type TaskType = typeof todolistsFromServer[number]['tasks'][number];
 // useState<number | string>(true)
 
 function App() {
-    // application logic: data/state <----- mutation function
-
-    // const stateWrapper = useState(null) // [ ourState, function(newState){} ]
-    // const todolists = stateWrapper[0] // actualValue from memory
-    // const setTodolists = stateWrapper[1] //
-
+    console.log('App rendering')
+    const newTotodolistTaskStatusInputRef = useRef<HTMLInputElement>(null);
     const [todolists, setTodolists] = useState<null | TodolistType[]>(null)
-    // const [tasks, setTasks] = useState<null | TodolistType[]>(null)
-    // const [status, setStatus] = useState<null | TodolistType[]>(null)
-    // const [theme, setTheme] = useState<null | TodolistType[]>(null)
+    const [newTodolistTitle, setNewTodolistTitle] = useState('')
 
     useEffect(() => {
         // как будто делаем запрос на апишку на бекенд за тудулистами
@@ -76,10 +78,44 @@ function App() {
         }, 1000)
     }
 
+    const handleAddTodolistClick = () => {
+        if (!todolists) return;
+        if (!newTotodolistTaskStatusInputRef.current) return;
+        //document.querySelector() // ❌
+
+        const newTodolist: TodolistType = {
+            id: Math.random(),
+            title: newTodolistTitle,
+            tasks: [{id: uuid(), title: 'new task', isDone: newTotodolistTaskStatusInputRef.current.checked}],
+        }
+        const newTodolists = [newTodolist, ...todolists]
+
+        setTodolists(newTodolists)
+
+        setNewTodolistTitle('')
+    }
+
+    const handleNewTodolistTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setNewTodolistTitle(event.currentTarget.value)
+    }
+
+    const handleNewTodolistTitleKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleAddTodolistClick()
+        }
+        console.log(KeyboardEvent)
+    }
+
     // ========== render algorithm
     return <>
         <h1>Todolists:</h1>
         <button onClick={handleRefreshClick}>Refresh</button>
+        <hr/>
+        <input value={newTodolistTitle}
+               onChange={handleNewTodolistTitleChange}
+               onKeyUp={handleNewTodolistTitleKeyUp}/>
+        <input type={'checkbox'} ref={newTotodolistTaskStatusInputRef} />
+        <button onClick={handleAddTodolistClick}>add new todolist</button>
         <hr/>
         {false}{true}{null}{undefined}
 
@@ -96,8 +132,6 @@ function App() {
 }
 
 export default App
-
-
 // atomic design : atom (ui kit); molecul -> organisms
 // vocabulary - словарь, tesaurus, ubiquitous language
 // SLA - SINGLE LAYER ABSTRACTION
