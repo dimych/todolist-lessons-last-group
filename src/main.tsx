@@ -2,94 +2,116 @@ import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App'
 import * as React from "react";
-import {useRef, useState} from "react";
+import {ChangeEvent, useRef, useState} from "react";
 
 
-
+//const reactElement = <Update /> // React.createElement()
+//reactElement = { type: Update, props: {}, childrens: []}
 
 createRoot(document.getElementById('root')!)
     .render(<><App /></>)
 
 
-//let intervalId: number | undefined;
+function Click() {
+    /// BLL
 
-// fiber {state,state,state,state,ref,ref,ref={current: XXX }}
-function ControllUncontrollExample() {
-    console.log('ControllUncontrollExample rendering')
-    const [inputValue, setInputValue] = useState('')
+    const [count, setCount] = useState(0)
 
-    return <div>
-        <input value={inputValue} onChange={(e) => {
-            setInputValue(e.currentTarget.value)
-        }} />
-        <hr/>
-        <input />
-    </div>
-}
-
-// fiber {state,state,state,state,ref,ref,ref={current: XXX }}
-function RefExample() {
-    const ref = useRef<number | undefined>(undefined)
-    const [seconds, setSeconds] = useState(1)
-
-    const handleStart = () => {
-        if (ref.current) return;
-
-        const intervalId = setInterval(() => {
-            setSeconds(prev => prev + 1)
-        }, 3000)
-        ref.current = intervalId
-    }
-    const handleStop = () => {
-        clearInterval(ref.current)
-        ref.current = undefined
+    const changeCountValue = (incValue: number) => {
+        if (count < 40) {
+            setCount(count + incValue);
+        }
     }
 
-    return <div>
-        <button onClick={handleStart}>start</button>
-        <button onClick={handleStop}>stop</button>
+
+    /// UI
+
+    const handlePlus1Click = () => {
+        changeCountValue(1)
+    }
+    const handlePlus10Click = () => {
+        changeCountValue(10)
+    }
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+       changeCountValue( Number(e.currentTarget.value) )
+    }
+
+    return <>
+        <button onClick={ handlePlus1Click }> + 1</button>
         <hr/>
-        {seconds}
-    </div>
+        <button onClick={ handlePlus10Click }> + 10</button>
+        <hr/>
+        <input type='number' defaultValue={1} onChange={ handleInputChange }/>
+        <hr/>
+        {count}
+    </>
 }
 
 
-// ✅
-function RefVsUseStateExample() {
-    const setIntervalIdRef = useRef<number | undefined>(undefined)
-    const [isTimerStarted, setIsTimerStarted] = useState<boolean>(false)
-    const [seconds, setSeconds] = useState(1)
-
-    const handleStart = () => {
-        if (isTimerStarted) return;
-
-        setIntervalIdRef.current = setInterval(() => {
-            setSeconds(prev => prev + 1)
-        }, 1000)
-        setIsTimerStarted(true)
-    }
-    const handleStop = () => {
-        clearInterval(setIntervalIdRef.current)
-        setIsTimerStarted(false)
-    }
-
-
-    return <div>
-        <button onClick={handleStart} disabled={ isTimerStarted }>start</button>
-        <button onClick={handleStop}>stop</button>
-        <hr/>
-        {seconds}
-    </div>
-}
-
-// let stateCell = 1
-// const setSeconds = (valueOrFunction) => {
-//     if (typeof valueOrFunction === 'function') {
-//         const newValue = valueOrFunction(stateCell)
-//         stateCell = newValue
-//         // render()
-//     } else {
-//         stateCell = valueOrFunction;
-//         // render()
-//     }
+// function a(){
+//         debugger;
+//         b()
+//         console.log('a finished')
 // }
+// function b(){c()}
+// function c(){d()}
+// function d(){}
+//
+// a();
+
+function Update() {
+    const [users, setUsers] = useState([
+        {id: 1, name: 'John', address: {city: 'New York'}},
+        {id: 2, name: 'Dimych', address: {city: 'Batumi'}},
+    ])
+    const handleAddSignClick = () => {
+        //const newUsers2 = [...users]
+        const newUsers = users
+            .map(u => u.id !== 2
+                ? u
+                : {
+                    ...u,
+                    name: u.name + "!"
+                }
+            )
+        setUsers(newUsers)
+    }
+    const handleChangeAddressClick = () => {
+        const newUsers = users
+            .map(u => u.id !== 2
+                ? u
+                : {
+                    ...u,
+                    address: {
+                        ...u.address,
+                        city: 'Minsk'
+                    },
+                }
+            )
+        setUsers(newUsers)
+    }
+
+    return <div>
+        <button onClick={handleAddSignClick}>add !</button>
+        <button onClick={handleChangeAddressClick}>change address</button>
+        {users.map(u => <li key={u.id}>{u.name}, {u.address?.city}</li>)}
+    </div>
+}
+
+// 1{ 100, 'dimych', addres:l2 },  3{ 100, 'dimcyh, address: l4}
+// 2{ 'batumi'} ,                      4{ 'batumi'} ,
+
+const a = {
+    id: 100,
+    name: 'Dimych',
+    address: {city: 'Batumi'}
+}
+const b = {
+    ...a,
+    // address: {...a.address}
+}
+a.address.city = 'Minsk'
+
+
+

@@ -1,3 +1,5 @@
+// noinspection TypeScriptExplicitMemberType
+
 import './App.css'
 import {Todolist} from './Todolist'
 import {type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState} from "react";
@@ -13,7 +15,7 @@ function uuid() {
 const todolistsFromServer = [
     {
         id: uuid(), title: 'что купить', tasks: [
-            {id: uuid(), title: 'молоко', isDone: false},
+            {id: uuid(), title: 'молоко', isDone: true},
             {id: uuid(), title: 'хлеб', isDone: false},
             {id: uuid(), title: 'яйца', isDone: false},
         ]
@@ -59,7 +61,7 @@ function App() {
         // как будто делаем запрос на апишку на бекенд за тудулистами
         setTimeout(() => {
             setTodolists(todolistsFromServer)
-        }, 1000)
+        }, 2000)
     }, [])
 
     const handleDeleteTodolist = (todolistIdToDelete: number) => {
@@ -106,6 +108,25 @@ function App() {
         console.log(KeyboardEvent)
     }
 
+    const changeTaskStatus = (todolistId: TodolistType['id'],
+                              taskId: TaskType['id'], status: boolean) => {
+        const newTodolists = todolists
+            .map(tl => tl.id !== todolistId
+                ? tl
+                : {
+                    ...tl,
+                    tasks: tl.tasks
+                        .map(t => t.id !== taskId
+                        ? t
+                        : {...t, isDone: status}),
+                }
+            )
+
+
+        setTodolists(newTodolists)
+    }
+
+
     // ========== render algorithm
     return <>
         <h1>Todolists:</h1>
@@ -114,18 +135,23 @@ function App() {
         <input value={newTodolistTitle}
                onChange={handleNewTodolistTitleChange}
                onKeyUp={handleNewTodolistTitleKeyUp}/>
-        <input type={'checkbox'} ref={newTotodolistTaskStatusInputRef} />
+        <input type={'checkbox'} ref={newTotodolistTaskStatusInputRef}/>
         <button onClick={handleAddTodolistClick}>add new todolist</button>
         <hr/>
         {false}{true}{null}{undefined}
 
         {!todolists && <span>Loading....</span>}
 
-        { todolists && todolists.length === 0 && <span>No todolists</span> }
+        {todolists && todolists.length === 0 && <span>No todolists</span>}
         {
-            todolists && todolists.map(tl => <div key={tl.id} style={{border: '1px solid black', padding: '5px', margin: '3px'}}>
+            todolists && todolists.map(tl => <div key={tl.id}
+                                                  style={{border: '1px solid black', padding: '5px', margin: '3px'}}>
                 {/*<button onClick={() => handleDeleteTodolistClick(tl.id) }>delete</button>*/}
-                <Todolist todolist={tl} onDelete={handleDeleteTodolist} />
+                <Todolist
+                    todolist={tl}
+                    onDelete={handleDeleteTodolist}
+                    onTaskStatusChange={changeTaskStatus}
+                />
             </div>)
         }
     </>

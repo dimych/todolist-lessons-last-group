@@ -1,7 +1,7 @@
 import {TodolistHeader} from './TodolistHeader'
 import {Task} from './Task'
-import {TodolistFilter} from './TodolistFilter'
-import {TodolistType} from "./App.tsx";
+import {FilterValueType, TodolistFilter} from './TodolistFilter'
+import {TaskType, TodolistType} from "./App.tsx";
 import {useState} from "react";
 
 // clousure, замыкание
@@ -13,9 +13,20 @@ import {useState} from "react";
 type TodolistProps = {
     todolist: TodolistType
     onDelete: (id: number) => void
+    onTaskStatusChange: (todolistId: TodolistType['id'],
+                         taskId: TaskType['id'], status: boolean) => void
 }
 export function Todolist(props: TodolistProps) {
     const [counter, setCounter] = useState(0)
+
+    // BLL
+    const [filterValue, setFilterValue] = useState<FilterValueType>('all')
+
+    const handleFilterChange = (filterValue: FilterValueType) => {
+        setFilterValue(filterValue)
+    }
+
+
     console.log('rerendering todolist: ' + props.todolist.title)
 
     return <div>
@@ -24,9 +35,33 @@ export function Todolist(props: TodolistProps) {
         <span onClick={ () => { setCounter(counter + 1) }  }>{counter}</span>
         <ul>
             {
-                props.todolist.tasks.map((t) =>  <Task key={t.id} task={t} />)
+                props.todolist.tasks
+                    .filter((t) => {
+                        // all => isDone: true/false
+                        // completed => true
+                        // active => false
+                        if (filterValue === 'all') return true
+                        if (filterValue === 'completed') return t.isDone
+                        if (filterValue === 'active') return !t.isDone
+                    })
+                    .map((t) =>  <Task
+                    key={t.id}
+                    task={t}
+                    onTaskStatusChange={ (taskId, status) => {
+                        props.onTaskStatusChange(props.todolist.id, taskId, status)
+                    } }
+                />)
             }
         </ul>
-        <TodolistFilter />
+        <TodolistFilter filterValue={filterValue} onFilterChange={handleFilterChange} />
     </div>
 }
+
+
+// todo к контрольной:
+// map, filter, [...array], useState, onClick, onChange ✅
+// reduce, forEach, useRef, props.callback  ❌
+
+// to second sprint:
+// useRef, props.callback ✅
+// reduce, forEach ❌
